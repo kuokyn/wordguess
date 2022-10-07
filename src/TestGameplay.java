@@ -8,7 +8,6 @@ import static org.junit.Assert.*;
 
 public class TestGameplay {
 
-
     @Test
     public void thisLetterIsInWord() {
         String actual = gamePLayForOneLoop("к", "");
@@ -66,6 +65,13 @@ public class TestGameplay {
     }
 
     @Test
+    public void tabCheck() {
+        String actual = gamePLayForOneLoop("\t", "");
+        String expected = "Табуляцию не надо. Вводите буквы, пожалуйста";
+        assertEquals(expected, actual);
+    }
+
+    @Test
     public void fileReader() {
         List<String> words = new ArrayList<>();
         String actual = "";
@@ -112,8 +118,10 @@ public class TestGameplay {
                     case "0":
                         return ("Жаль, не угадали. Загаданное слово: клавиатура");
                     case "8":
-                        String leftLetters = wordToGuess.replaceAll(guess, "");
-                        return ("Попробуйте букву "  + leftLetters.charAt(0));
+                        return ("Попробуйте букву 'к'");
+                    case "\t": {
+                        return ("Табуляцию не надо. Вводите буквы, пожалуйста");
+                    }
                 }
                 if (guesses.toString().contains(guess)) {
                     return ("Вы уже вводили такую букву");

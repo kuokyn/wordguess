@@ -16,9 +16,29 @@ public class Gameplay {
     }
 
     public void start() {
+        menu();
         fileReader();
         chooseWord();
         play();
+    }
+
+    private void menu() {
+        System.out.print("Введите имя игрока: ");
+        String gamerName = scanner.nextLine();
+        gamerName = gamerName.replaceAll(" ", "");
+        gamerName = gamerName.replaceAll("\t", "");
+        if (gamerName.equals(""))
+            gamerName = "No name";
+        System.out.println("\n====================Добро пожаловать в 'Поле чудес' !====================");
+        System.out.println(" - Вам даётся описание загаданного слова");
+        System.out.println(" - Попробуйте его угадать, вводя по одной букве");
+        System.out.println(" - Если вы догадались, то можете ввести слово полностью");
+        System.out.println(" - Строка из нескольких символов будет считаться как догадка полного слова");
+        System.out.println(" - Если вы хотите получить подсказку, введите '8'");
+        System.out.println(" - Если вы хотите сдаться, введите '0'");
+        System.out.println("===========================================================================\n");
+        System.out.println("Удачи, " + gamerName + " !\n");
+
     }
 
     private void play() {
@@ -38,18 +58,19 @@ public class Gameplay {
             }
 
             if (guessedNumOfLetters == numOfLettersInWord) {
-                System.out.println("\nВы угадали!");
+                System.out.println("\nВы угадали! Загаданное слово: '" + wordToGuess + "'");
                 return;
             }
 
             System.out.print("\nВведите букву: ");
             String guess = scanner.nextLine();
+            guess = guess.toLowerCase();
             if (guess.length() != 1) {
                 if (guess.length() == 0) {
                     System.out.println("Пожалуйста, введите букву");
                 } else {
                     if (guess.equals(wordToGuess)) {
-                        System.out.println("\nВы угадали!");
+                        System.out.println("\nВы угадали! Загаданное слово: '" + wordToGuess + "'");
                         return;
                     } else {
                         System.out.println("\nВы не угадали. Вводите буквы дальше...");
@@ -61,8 +82,15 @@ public class Gameplay {
                         System.out.println("Жаль, не угадали. Загаданное слово: '" + wordToGuess + "'");
                         return;
                     }
+                    case "\t" -> {
+                        System.out.println("Табуляцию не надо. Вводите буквы, пожалуйста");
+                        continue;
+                    }
                     case "8" -> {
-                        String leftLetters = wordToGuess.replaceAll(guess, "");
+                        String leftLetters = wordToGuess;
+                        for (char letter : guesses.toString().toCharArray()) {
+                            leftLetters = leftLetters.replaceAll(letter + "", "");
+                        }
                         System.out.println("Попробуйте букву '" + leftLetters.charAt(0) + "'");
                         continue;
                     }
