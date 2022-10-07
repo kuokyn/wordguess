@@ -7,16 +7,15 @@ import java.util.Scanner;
 
 public class Gameplay {
 
-    private List<String> words = new ArrayList<>();
+    private final List<String> words = new ArrayList<>();
     private String wordToGuess = "";
     private int lines = 0;
+    private static final Scanner scanner = new Scanner(System.in);
 
     public Gameplay() {
     }
 
-
     public void start() {
-
         fileReader();
         chooseWord();
         play();
@@ -43,19 +42,32 @@ public class Gameplay {
                 return;
             }
 
-            Scanner scanner = new Scanner(System.in);
             System.out.print("\nВведите букву: ");
             String guess = scanner.nextLine();
             if (guess.length() != 1) {
-                if (guess.equals(wordToGuess)){
-                    System.out.println("Вы угадали!");
-                    return;
-                }
-                else {
-                    System.out.println("Вы не угадали. Вводите буквы");
+                if (guess.length() == 0) {
+                    System.out.println("Пожалуйста, введите букву");
+                } else {
+                    if (guess.equals(wordToGuess)) {
+                        System.out.println("\nВы угадали!");
+                        return;
+                    } else {
+                        System.out.println("\nВы не угадали. Вводите буквы дальше...");
+                    }
                 }
             } else {
-                if (guesses.toString().contains(guess)){
+                switch (guess) {
+                    case "0" -> {
+                        System.out.println("Жаль, не угадали. Загаданное слово: '" + wordToGuess + "'");
+                        return;
+                    }
+                    case "8" -> {
+                        String leftLetters = wordToGuess.replaceAll(guess, "");
+                        System.out.println("Попробуйте букву '" + leftLetters.charAt(0) + "'");
+                        continue;
+                    }
+                }
+                if (guesses.toString().contains(guess)) {
                     System.out.println("Вы уже вводили такую букву");
                 } else {
                     guesses.append(guess);
