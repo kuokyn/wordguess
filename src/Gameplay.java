@@ -24,9 +24,7 @@ public class Gameplay {
 
     private void menu() {
         System.out.print("Введите имя игрока: ");
-        String gamerName = scanner.nextLine();
-        gamerName = gamerName.replaceAll(" ", "");
-        gamerName = gamerName.replaceAll("\t", "");
+        String gamerName = scanner.nextLine().replaceAll(" ", "").replaceAll("\t", "");
         if (gamerName.equals(""))
             gamerName = "No name";
         System.out.println("\n====================Добро пожаловать в 'Поле чудес' !====================");
@@ -42,29 +40,26 @@ public class Gameplay {
     }
 
     private void play() {
-        char[] wordLetters = wordToGuess.toCharArray();
-        int numOfLettersInWord = wordToGuess.length();
         int guessedNumOfLetters = 0;
         StringBuilder guesses = new StringBuilder();
 
         while (true) {
-            for (char letter : wordLetters) {
-                String letterToStr = letter + "";
-                if (guesses.toString().contains(letterToStr)) {
-                    System.out.print(letterToStr + " ");
+            for (char letter : wordToGuess.toCharArray()) {
+                if (guesses.toString().contains(letter + "")) {
+                    System.out.print(letter + " ");
                 } else {
                     System.out.print("_ ");
                 }
             }
 
-            if (guessedNumOfLetters == numOfLettersInWord) {
+            if (guessedNumOfLetters == wordToGuess.length()) {
                 System.out.println("\nВы угадали! Загаданное слово: '" + wordToGuess + "'");
                 return;
             }
 
             System.out.print("\nВведите букву: ");
-            String guess = scanner.nextLine();
-            guess = guess.toLowerCase();
+            String guess = scanner.nextLine().toLowerCase().replaceAll(" ", "").replaceAll("\t", "");
+
             if (guess.length() != 1) {
                 if (guess.length() == 0) {
                     System.out.println("Пожалуйста, введите букву");
@@ -95,6 +90,7 @@ public class Gameplay {
                         continue;
                     }
                 }
+
                 if (guesses.toString().contains(guess)) {
                     System.out.println("Вы уже вводили такую букву");
                 } else {
@@ -113,29 +109,22 @@ public class Gameplay {
 
     private void chooseWord() {
         Random r = new Random();
-        int low = 0;
-        int high = lines;
-        int result = r.nextInt(high - low) + low;
-        String certainLine = words.get(result);
-        String separator = ";";
-        String[] res = certainLine.split(separator);
+        int result = r.nextInt(lines);
+        String[] res = words.get(result).split(";");
         System.out.println(res[1]);
         this.wordToGuess = res[0];
-
     }
 
     private void fileReader() {
         try {
-            File myFile = new File("D:/Projects/java_projects/word_guess/src/words.txt");
+            File myFile = new File("src/words.txt");
             Scanner myReader = new Scanner(myFile);
-
             while (myReader.hasNextLine()) {
                 String data = myReader.nextLine();
                 words.add(data);
                 lines++;
             }
             myReader.close();
-
         } catch (FileNotFoundException e) {
             System.out.println("Файл не найден!");
             e.printStackTrace();
